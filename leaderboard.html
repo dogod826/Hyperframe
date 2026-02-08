@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Global Leaderboard — Hyperframe</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ========= GLOBAL ========= */
+
+:root{
+--accent:#a855f7;
+--accent2:#6366f1;
+--glass:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.1);
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family:'Space Grotesk',sans-serif;
+background:#040404;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* ========= BACKGROUND ========= */
+
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+}
+
+.orb{
+position:absolute;
+width:700px;
+height:700px;
+border-radius:50%;
+filter:blur(160px);
+opacity:.35;
+animation:float 20s infinite ease-in-out;
+}
+
+.orb:nth-child(1){
+background:#7c3aed;
+top:-250px;
+left:-200px;
+}
+
+.orb:nth-child(2){
+background:#2563eb;
+bottom:-300px;
+right:-200px;
+animation-duration:26s;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(80px)}
+100%{transform:translateY(0)}
+}
+
+/* mouse glow */
+
+.glow{
+position:fixed;
+width:600px;
+height:600px;
+border-radius:50%;
+background:radial-gradient(circle, rgba(168,85,247,.18), transparent 60%);
+pointer-events:none;
+z-index:-1;
+transform:translate(-50%,-50%);
+}
+
+/* ========= ARENA ========= */
+
+.container{
+max-width:900px;
+margin:120px auto;
+padding:3rem;
+border-radius:26px;
+background:var(--glass);
+backdrop-filter:blur(30px);
+border:1px solid var(--border);
+box-shadow:0 20px 80px rgba(0,0,0,.7);
+}
+
+/* title */
+
+h1{
+text-align:center;
+font-family:'JetBrains Mono';
+margin-bottom:2.5rem;
+font-size:2.2rem;
+background:linear-gradient(90deg,#c084fc,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* ========= PLAYER ROW ========= */
+
+.player{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 20px;
+margin:14px 0;
+border-radius:16px;
+background:rgba(255,255,255,.04);
+transition:.25s;
+}
+
+.player:hover{
+transform:translateY(-6px);
+box-shadow:0 0 25px rgba(168,85,247,.25);
+}
+
+/* YOU highlight */
+
+.you{
+outline:2px solid var(--accent);
+box-shadow:0 0 20px rgba(168,85,247,.45);
+}
+
+/* TOP 3 */
+
+.player:nth-child(1){
+background:linear-gradient(90deg, rgba(255,215,0,.15), transparent);
+}
+
+.player:nth-child(2){
+background:linear-gradient(90deg, rgba(192,192,192,.15), transparent);
+}
+
+.player:nth-child(3){
+background:linear-gradient(90deg, rgba(205,127,50,.15), transparent);
+}
+
+/* rank */
+
+.rank{
+font-weight:700;
+opacity:.7;
+}
+
+/* home button */
+
+.homeBtn{
+display:block;
+margin:40px auto 0;
+padding:.9rem 1.6rem;
+border:none;
+border-radius:16px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(135deg,var(--accent),var(--accent2));
+color:white;
+transition:.25s;
+}
+
+.homeBtn:hover{
+transform:translateY(-4px);
+box-shadow:0 0 25px var(--accent);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+<div class="orb"></div>
+<div class="orb"></div>
+</div>
+
+<div class="glow" id="glow"></div>
+
+<div class="container">
+
+<h1>🏆 Global Time Arena</h1>
+
+<div id="board"></div>
+
+<button class="homeBtn" onclick="goHome()">⬅ Back Home</button>
+
+</div>
+
+<script>
+function goHome(){
+window.location.href="index.html";
+}
+
+// mouse glow
+const glow=document.getElementById("glow");
+
+window.addEventListener("mousemove",e=>{
+glow.style.left=e.clientX+"px";
+glow.style.top=e.clientY+"px";
+});
+</script>
+
+<!-- your firebase leaderboard logic -->
+<script type="module" src="js/leaderboard.js"></script>
+
+</body>
+</html>

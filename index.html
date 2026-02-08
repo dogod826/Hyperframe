@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hyperframe</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+:root{
+--accent:#a855f7;
+--accent2:#6366f1;
+--glass:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.1);
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family:'Space Grotesk',sans-serif;
+color:white;
+min-height:100vh;
+background:#040404;
+overflow-x:hidden;
+}
+
+/* ================= MOUSE GLOW ================= */
+
+.mouse-glow{
+position:fixed;
+width:600px;
+height:600px;
+border-radius:50%;
+background:radial-gradient(circle, rgba(168,85,247,.18), transparent 60%);
+pointer-events:none;
+z-index:-1;
+transform:translate(-50%,-50%);
+}
+
+/* ================= BACKGROUND ================= */
+
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+overflow:hidden;
+}
+
+.orb{
+position:absolute;
+width:700px;
+height:700px;
+border-radius:50%;
+filter:blur(160px);
+opacity:.35;
+animation:float 20s infinite ease-in-out;
+}
+
+.orb:nth-child(1){
+background:#7c3aed;
+top:-250px;
+left:-200px;
+}
+
+.orb:nth-child(2){
+background:#2563eb;
+bottom:-300px;
+right:-200px;
+animation-duration:26s;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(80px)}
+100%{transform:translateY(0)}
+}
+
+/* ================= GLASS ================= */
+
+.glass{
+background:var(--glass);
+backdrop-filter:blur(26px);
+border:1px solid var(--border);
+border-radius:20px;
+box-shadow:0 15px 60px rgba(0,0,0,.65);
+}
+
+/* ================= NAV ================= */
+
+header{
+position:fixed;
+top:0;
+width:100%;
+z-index:1000;
+}
+
+.navbar{
+max-width:1300px;
+margin:1rem auto;
+padding:1rem 1.8rem;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-family:'JetBrains Mono';
+font-size:1.8rem;
+letter-spacing:2px;
+background:linear-gradient(90deg,#c084fc,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+nav{
+display:flex;
+align-items:center;
+gap:1rem;
+}
+
+nav a{
+text-decoration:none;
+color:white;
+opacity:.85;
+transition:.25s;
+}
+
+nav a:hover{
+opacity:1;
+text-shadow:0 0 12px var(--accent);
+}
+
+.timer,.user{
+padding:.55rem .9rem;
+}
+
+.logout{
+cursor:pointer;
+padding:.6rem 1.2rem;
+border-radius:14px;
+background:linear-gradient(135deg,var(--accent),var(--accent2));
+transition:.25s;
+}
+
+.logout:hover{
+transform:translateY(-4px);
+box-shadow:0 0 25px var(--accent);
+}
+
+/* ================= HERO ================= */
+
+.hero{
+max-width:1200px;
+margin:auto;
+padding:12rem 1.5rem 7rem;
+text-align:center;
+}
+
+.hero h1{
+font-family:'JetBrains Mono';
+font-size:clamp(3.5rem,7vw,5rem);
+margin-bottom:1rem;
+background:linear-gradient(90deg,#c084fc,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+opacity:.75;
+font-size:1.15rem;
+}
+
+/* ================= CARDS ================= */
+
+.cards{
+max-width:1300px;
+margin:auto;
+padding:2rem;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+gap:2.5rem;
+}
+
+.card{
+padding:2.6rem;
+cursor:pointer;
+transition:.35s;
+position:relative;
+overflow:hidden;
+}
+
+/* reflective sweep */
+.card::after{
+content:"";
+position:absolute;
+top:-120%;
+left:-40%;
+width:60%;
+height:300%;
+background:linear-gradient(
+120deg,
+transparent,
+rgba(255,255,255,.25),
+transparent
+);
+transform:rotate(25deg);
+transition:.7s;
+}
+
+.card:hover::after{
+left:140%;
+}
+
+.card:hover{
+transform:translateY(-14px) scale(1.05);
+box-shadow:0 0 50px rgba(168,85,247,.35);
+}
+
+.icon{
+font-size:3.2rem;
+margin-bottom:1rem;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+text-align:center;
+padding:3rem;
+opacity:.45;
+margin-top:3rem;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="mouse-glow" id="glow"></div>
+
+<div class="bg">
+<div class="orb"></div>
+<div class="orb"></div>
+</div>
+
+<header>
+<div class="navbar glass">
+
+<div class="logo">⚡ Hyperframe</div>
+
+<nav>
+
+<a href="leaderboard.html">Leaderboard</a>
+
+<div class="timer glass">
+⏱ <span id="timer">0s</span>
+</div>
+
+<div class="user glass">
+👤 <span id="navUser"></span>
+</div>
+
+<div class="logout" onclick="logout()">Logout</div>
+
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<h1>Hyperframe</h1>
+<p>The next-generation gaming hub.</p>
+</section>
+
+<section class="cards">
+
+<div class="card glass" onclick="location.href='leaderboard.html'">
+<div class="icon">🏆</div>
+<h3>Leaderboard</h3>
+<p>Compete globally in total playtime.</p>
+</div>
+
+<div class="card glass">
+<div class="icon">🎮</div>
+<h3>Game Library</h3>
+<p>Launch your universe.</p>
+</div>
+
+<div class="card glass">
+<div class="icon">⚡</div>
+<h3>Performance</h3>
+<p>Built for speed and fluidity.</p>
+</div>
+
+</section>
+
+<footer>
+© 2026 Hyperframe
+</footer>
+
+<script type="module" src="js/app.js"></script>
+
+<script>
+
+// logout
+function logout(){
+localStorage.removeItem("username");
+window.location.href="login.html";
+}
+
+// mouse glow
+const glow = document.getElementById("glow");
+
+window.addEventListener("mousemove", e=>{
+glow.style.left = e.clientX + "px";
+glow.style.top = e.clientY + "px";
+});
+
+// subtle parallax
+document.addEventListener("mousemove", e=>{
+const x = (window.innerWidth/2 - e.clientX)/40;
+const y = (window.innerHeight/2 - e.clientY)/40;
+
+document.querySelectorAll(".card").forEach(card=>{
+card.style.transform = `translate(${x}px, ${y}px)`;
+});
+});
+
+</script>
+
+</body>
+</html>
