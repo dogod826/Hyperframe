@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -122,3 +123,129 @@ alert("Player deleted!");
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hyperframe Admin</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Space Grotesk',sans-serif;
+background:#0e0e0e;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.panel{
+background:rgba(255,255,255,.08);
+padding:2rem;
+border-radius:16px;
+width:400px;
+backdrop-filter:blur(12px);
+}
+
+input,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+}
+
+button{
+background:#9b59b6;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+button:hover{
+box-shadow:0 0 10px #9b59b6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+<h2>🔥 Hyperframe Admin</h2>
+
+<input id="player" placeholder="Username">
+<input id="seconds" placeholder="Seconds to add">
+
+<button onclick="addTime()">Add Time</button>
+<button onclick="resetPlayer()">Reset Player</button>
+<button onclick="deletePlayer()">Delete Player</button>
+
+</div>
+
+<script type="module">
+const ADMIN = "HyperframeX";
+
+if(localStorage.getItem("username") !== ADMIN){
+document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:40vh;'>Access Denied</h1>";
+throw new Error("Not admin");
+}
+
+import { db } from "./js/firebase.js";
+import {
+doc,
+updateDoc,
+deleteDoc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function addTime(){
+
+const name = document.getElementById("player").value;
+const sec = Number(document.getElementById("seconds").value);
+
+await updateDoc(
+doc(db,"leaderboard",name),
+{
+time: sec
+}
+);
+
+alert("Time updated!");
+}
+
+async function resetPlayer(){
+
+const name = document.getElementById("player").value;
+
+await setDoc(
+doc(db,"leaderboard",name),
+{
+name:name,
+time:0
+}
+);
+
+alert("Player reset!");
+}
+
+async function deletePlayer(){
+
+const name = document.getElementById("player").value;
+
+await deleteDoc(doc(db,"leaderboard",name));
+
+alert("Player deleted!");
+}
+
+</script>
+
+</body>
+</html>
+>>>>>>> ac2bdb4ab0c2882cfbaa1f5c6a06570f30655ca0
