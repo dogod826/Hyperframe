@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranks — Hyperframe</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--accent:#a855f7;
+--accent2:#6366f1;
+--glass:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.1);
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family:'Space Grotesk',sans-serif;
+background:#040404;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* background */
+.bg{
+position:fixed;
+inset:0;
+z-index:-2;
+}
+
+.orb{
+position:absolute;
+width:700px;
+height:700px;
+border-radius:50%;
+filter:blur(160px);
+opacity:.35;
+animation:float 20s infinite ease-in-out;
+}
+
+.orb:nth-child(1){
+background:#7c3aed;
+top:-250px;
+left:-200px;
+}
+
+.orb:nth-child(2){
+background:#2563eb;
+bottom:-300px;
+right:-200px;
+animation-duration:26s;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(80px)}
+100%{transform:translateY(0)}
+}
+
+.container{
+max-width:900px;
+margin:120px auto;
+padding:3rem;
+border-radius:26px;
+background:var(--glass);
+backdrop-filter:blur(30px);
+border:1px solid var(--border);
+box-shadow:0 20px 80px rgba(0,0,0,.7);
+}
+
+h1{
+text-align:center;
+font-family:'JetBrains Mono';
+margin-bottom:2.5rem;
+font-size:2.2rem;
+background:linear-gradient(90deg,#c084fc,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.rank{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 22px;
+margin:14px 0;
+border-radius:16px;
+background:rgba(255,255,255,.04);
+transition:.25s;
+}
+
+.rank:hover{
+transform:translateY(-6px);
+box-shadow:0 0 25px rgba(168,85,247,.25);
+}
+
+.rank-name{
+font-weight:600;
+font-size:1.1rem;
+}
+
+.rank-time{
+opacity:.7;
+}
+
+.homeBtn{
+display:block;
+margin:40px auto 0;
+padding:.9rem 1.6rem;
+border:none;
+border-radius:16px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(135deg,var(--accent),var(--accent2));
+color:white;
+transition:.25s;
+}
+
+.homeBtn:hover{
+transform:translateY(-4px);
+box-shadow:0 0 25px var(--accent);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+<div class="orb"></div>
+<div class="orb"></div>
+</div>
+
+<div class="container">
+<h1>⚔ Hyperframe Rank System</h1>
+
+<div id="rankList"></div>
+
+<button class="homeBtn" onclick="location.href='index.html'">⬅ Back Home</button>
+</div>
+
+<script>
+
+// Rank thresholds pulled directly from app.js logic
+// If you ever change titles there, update this list to match.
+const RANKS = [
+{ name:"🌱 Rookie", hours:0 },
+{ name:"🎮 Gamer", hours:1 },
+{ name:"🎯 Dedicated", hours:5 },
+{ name:"💪 Grinder", hours:10 },
+{ name:"🧠 Veteran", hours:25 },
+{ name:"⚡ Elite", hours:50 },
+{ name:"🔥 Warlord", hours:100 },
+{ name:"👑 Mythic", hours:250 }
+];
+
+const list = document.getElementById("rankList");
+
+RANKS.forEach((rank, index)=>{
+
+const el = document.createElement("div");
+el.className = "rank";
+
+const next = RANKS[index + 1];
+
+el.innerHTML = `
+<div class="rank-name">${rank.name}</div>
+<div class="rank-time">
+${next
+? `${rank.hours}h → ${next.hours}h`
+: `${rank.hours}h+ (MAX)`}
+</div>
+`;
+
+list.appendChild(el);
+});
+
+</script>
+
+</body>
+</html>
