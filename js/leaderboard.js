@@ -1,77 +1,76 @@
 import { db } from "./firebase.js";
-
 import {
-collection,
-query,
-orderBy,
-limit,
-onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+//Ranks
 
-// login check
-const username = localStorage.getItem("username");
+function getRank(score){
 
-if(!username){
-window.location.href="login.html";
+  if(score >= 15000) return "👑";
+  if(score >= 10000) return "🔥";
+  if(score >= 7500)  return "🔷";
+  if(score >= 5000)  return "💠";
+  if(score >= 3000)  return "🥇";
+  if(score >= 1500)  return "🥈";
+  if(score >= 500)   return "🥉";
+
+  return "🟢";
 }
 
+const leaderboardBody = document.getElementById("leaderboard-body");
 
+async function loadLeaderboard() {
 
-function formatTime(sec){
+  leaderboardBody.innerHTML =
+    "<tr><td colspan='3'>Loading leaderboard...</td></tr>";
 
-sec = Number(sec) || 0;
+  try {
 
-const d=Math.floor(sec/86400);
-const h=Math.floor((sec%86400)/3600);
-const m=Math.floor((sec%3600)/60);
-const s=sec%60;
+    const q = query(
+      collection(db, "users"),
+      orderBy("score", "desc"),
+      limit(50)
+    );
 
-if(d>0) return `${d}d ${h}h`;
-if(h>0) return `${h}h ${m}m`;
-if(m>0) return `${m}m ${s}s`;
-return `${s}s`;
+    const snapshot = await getDocs(q);
+
+    leaderboardBody.innerHTML = "";
+
+    if (snapshot.empty) {
+      leaderboardBody.innerHTML =
+        "<tr><td colspan='3'>No players yet.</td></tr>";
+      return;
+    }
+
+    let rank = 1;
+
+    snapshot.forEach(doc => {
+
+      const data = doc.data();
+
+      leaderboardBody.innerHTML += `
+        <tr>
+          <td>#${rank}</td>
+          <td>${getRank(data.score ?? 0)} ${data.username}</td>
+          <td>${data.score ?? 0}</td>
+        </tr>
+      `;
+
+      rank++;
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    leaderboardBody.innerHTML =
+      "<tr><td colspan='3'>Failed to load leaderboard.</td></tr>";
+  }
 }
 
-
-
-// 🔥 Realtime query
-const leaderboardQuery = query(
-collection(db,"leaderboard"),
-orderBy("time","desc"),
-limit(5)
-);
-
-
-
-// ⭐ LIVE LISTENER
-onSnapshot(leaderboardQuery,(snapshot)=>{
-
-const board = document.getElementById("board");
-
-board.innerHTML="";
-
-let rank = 1;
-
-snapshot.forEach((doc)=>{
-
-const data = doc.data();
-
-const div = document.createElement("div");
-
-div.className =
-"player glass" + (data.name === username ? " you": "");
-
-
-div.innerHTML=`
-<span>#${rank} ${data.name}</span>
-<span>${formatTime(data.time)}</span>
-`;
-
-board.appendChild(div);
-
-rank++;
-
-});
-
-});
+loadLeaderboard();

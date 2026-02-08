@@ -1,178 +1,282 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Global Leaderboard — Hyperframe</title>
+<title>Hyperframe Leaderboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* ========= GLOBAL ========= */
+/* ================================
+        ROOT + RESET
+================================ */
 
 :root{
---accent:#a855f7;
---accent2:#6366f1;
---glass:rgba(255,255,255,.06);
---border:rgba(255,255,255,.1);
+  --accent:#a855f7;
+  --accent2:#6366f1;
 }
 
 *{
-box-sizing:border-box;
-margin:0;
-padding:0;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 body{
-font-family:'Space Grotesk',sans-serif;
-background:#040404;
-color:white;
-min-height:100vh;
-overflow-x:hidden;
+  font-family:'Space Grotesk',sans-serif;
+  background:#030307;
+  color:white;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* ========= BACKGROUND ========= */
+/* ================================
+        AAA BACKGROUND
+================================ */
 
 .bg{
-position:fixed;
-inset:0;
-z-index:-2;
+  position:fixed;
+  inset:0;
+  z-index:-5;
 }
 
 .orb{
-position:absolute;
-width:700px;
-height:700px;
-border-radius:50%;
-filter:blur(160px);
-opacity:.35;
-animation:float 20s infinite ease-in-out;
+  position:absolute;
+  width:900px;
+  height:900px;
+  border-radius:50%;
+  filter:blur(180px);
+  opacity:.35;
+  animation:float 32s infinite ease-in-out;
 }
 
-.orb:nth-child(1){
-background:#7c3aed;
-top:-250px;
-left:-200px;
+.orb1{
+  background:#7c3aed;
+  top:-400px;
+  left:-250px;
 }
 
-.orb:nth-child(2){
-background:#2563eb;
-bottom:-300px;
-right:-200px;
-animation-duration:26s;
+.orb2{
+  background:#2563eb;
+  bottom:-450px;
+  right:-300px;
+  animation-duration:38s;
+}
+
+.grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(circle, black 30%, transparent 85%);
 }
 
 @keyframes float{
-0%{transform:translateY(0)}
-50%{transform:translateY(80px)}
-100%{transform:translateY(0)}
+  0%{transform:translateY(0)}
+  50%{transform:translateY(140px)}
+  100%{transform:translateY(0)}
 }
 
-/* mouse glow */
+/* ================================
+        CURSOR GLOW
+================================ */
 
-.glow{
-position:fixed;
-width:600px;
-height:600px;
-border-radius:50%;
-background:radial-gradient(circle, rgba(168,85,247,.18), transparent 60%);
-pointer-events:none;
-z-index:-1;
-transform:translate(-50%,-50%);
+.cursor-glow{
+  position:fixed;
+  width:520px;
+  height:520px;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle,
+    rgba(168,85,247,.22),
+    rgba(99,102,241,.12),
+    transparent 70%);
+  transform:translate(-50%,-50%);
+  filter:blur(20px);
+  z-index:-2;
 }
 
-/* ========= ARENA ========= */
+/* ================================
+        NAVBAR
+================================ */
+
+header{
+  padding:1.6rem;
+}
+
+.navbar{
+  max-width:1200px;
+  margin:auto;
+  padding:1rem 1.8rem;
+  border-radius:22px;
+
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(30px);
+
+  border:1px solid rgba(255,255,255,.1);
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-family:'JetBrains Mono';
+  font-size:1.4rem;
+  background:linear-gradient(90deg,#c084fc,#818cf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  margin-left:1.4rem;
+  opacity:.8;
+}
+
+nav a:hover{
+  opacity:1;
+}
+
+/* ================================
+        MAIN CONTAINER
+================================ */
 
 .container{
-max-width:900px;
-margin:120px auto;
-padding:3rem;
-border-radius:26px;
-background:var(--glass);
-backdrop-filter:blur(30px);
-border:1px solid var(--border);
-box-shadow:0 20px 80px rgba(0,0,0,.7);
+  max-width:1200px;
+  margin:3rem auto;
+  padding:3rem;
+
+  border-radius:30px;
+
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(40px);
+
+  border:1px solid rgba(255,255,255,.12);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.04),
+    0 40px 120px rgba(0,0,0,.6);
 }
 
-/* title */
+/* ================================
+        YOUR RANK
+================================ */
 
-h1{
-text-align:center;
-font-family:'JetBrains Mono';
-margin-bottom:2.5rem;
-font-size:2.2rem;
-background:linear-gradient(90deg,#c084fc,#818cf8);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+#yourRank{
+  margin-bottom:2.2rem;
+  padding:1.3rem 1.6rem;
+
+  border-radius:18px;
+
+  background:linear-gradient(90deg,
+    rgba(168,85,247,.35),
+    transparent);
+
+  border:1px solid rgba(168,85,247,.45);
+
+  box-shadow:0 0 40px rgba(168,85,247,.35);
+
+  font-weight:600;
 }
 
-/* ========= PLAYER ROW ========= */
+/* ================================
+        TABLE → FLOATING CARDS
+================================ */
 
-.player{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 20px;
-margin:14px 0;
-border-radius:16px;
-background:rgba(255,255,255,.04);
-transition:.25s;
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 16px;
 }
 
-.player:hover{
-transform:translateY(-6px);
-box-shadow:0 0 25px rgba(168,85,247,.25);
+thead th{
+  text-align:left;
+  opacity:.55;
+  font-size:.85rem;
+  padding-left:12px;
 }
 
-/* YOU highlight */
+tbody tr{
+  background:rgba(255,255,255,.045);
+  border-radius:20px;
+  overflow:hidden;
+
+  transition:.35s cubic-bezier(.2,.8,.2,1);
+
+  /* AAA ambient shadow stack */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.04),
+    0 20px 40px rgba(0,0,0,.25),
+    0 60px 120px rgba(0,0,0,.35);
+
+}
+
+
+tbody tr:hover{
+  transform:translateY(-6px) scale(1.01);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 12px 28px rgba(0,0,0,.35),
+    0 50px 100px rgba(0,0,0,.25);
+}
+
+td{
+  padding:1.4rem;
+}
+
+tbody tr td:first-child{
+  border-radius:18px 0 0 18px;
+  font-weight:700;
+}
+
+tbody tr td:last-child{
+  border-radius:0 18px 18px 0;
+  font-family:'JetBrains Mono';
+}
+
+/* ================================
+        TOP 3 — GOD TIER
+================================ */
+
+.gold{
+  background:linear-gradient(90deg,
+    rgba(255,215,0,.28),
+    transparent);
+
+  box-shadow:
+    0 0 40px rgba(255,215,0,.35),
+    0 30px 80px rgba(0,0,0,.35);
+}
+
+.silver{
+  background:linear-gradient(90deg,
+    rgba(192,192,192,.25),
+    transparent);
+}
+
+.bronze{
+  background:linear-gradient(90deg,
+    rgba(205,127,50,.28),
+    transparent);
+}
+
+/* ================================
+        YOU
+================================ */
 
 .you{
-outline:2px solid var(--accent);
-box-shadow:0 0 20px rgba(168,85,247,.45);
-}
-
-/* TOP 3 */
-
-.player:nth-child(1){
-background:linear-gradient(90deg, rgba(255,215,0,.15), transparent);
-}
-
-.player:nth-child(2){
-background:linear-gradient(90deg, rgba(192,192,192,.15), transparent);
-}
-
-.player:nth-child(3){
-background:linear-gradient(90deg, rgba(205,127,50,.15), transparent);
-}
-
-/* rank */
-
-.rank{
-font-weight:700;
-opacity:.7;
-}
-
-/* home button */
-
-.homeBtn{
-display:block;
-margin:40px auto 0;
-padding:.9rem 1.6rem;
-border:none;
-border-radius:16px;
-font-weight:600;
-cursor:pointer;
-background:linear-gradient(135deg,var(--accent),var(--accent2));
-color:white;
-transition:.25s;
-}
-
-.homeBtn:hover{
-transform:translateY(-4px);
-box-shadow:0 0 25px var(--accent);
+  outline:2px solid var(--accent);
+  box-shadow:
+    0 0 35px rgba(168,85,247,.6),
+    0 40px 100px rgba(0,0,0,.45);
 }
 
 </style>
@@ -180,258 +284,158 @@ box-shadow:0 0 25px var(--accent);
 
 <body>
 
+<!-- BACKGROUND -->
 <div class="bg">
-<div class="orb"></div>
-<div class="orb"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="grid"></div>
 </div>
 
-<div class="glow" id="glow"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header>
+<div class="navbar">
+<div class="logo">⚡ Hyperframe</div>
+<nav>
+<a href="index.html">Home</a>
+<a href="ranks.html">Ranks</a>
+</nav>
+</div>
+</header>
 
 <div class="container">
 
-<h1>🏆 Global Time Arena</h1>
+<div id="yourRank">Loading your rank...</div>
 
-<div id="board"></div>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Player</th>
+<th>Score</th>
+</tr>
+</thead>
 
-<button class="homeBtn" onclick="goHome()">⬅ Back Home</button>
+<tbody id="leaderboard-body"></tbody>
+</table>
 
 </div>
 
+<!-- CURSOR -->
 <script>
-function goHome(){
-window.location.href="index.html";
-}
+const glow=document.getElementById("cursorGlow");
 
-// mouse glow
-const glow=document.getElementById("glow");
+let x=innerWidth/2;
+let y=innerHeight/2;
 
 window.addEventListener("mousemove",e=>{
-glow.style.left=e.clientX+"px";
-glow.style.top=e.clientY+"px";
+x=e.clientX;
+y=e.clientY;
+});
+
+function animate(){
+glow.style.left=x+"px";
+glow.style.top=y+"px";
+requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+<!-- 🔥 ORIGINAL LEADERBOARD ENGINE (UNCHANGED) -->
+<script type="module">
+import { db, auth } from "./js/firebase.js";
+import {
+collection,
+getDocs,
+query,
+orderBy,
+limit
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+let currentUID=null;
+
+function getRank(score){
+if(score>=10000) return {name:"Hyper",emoji:"⚡"};
+if(score>=5000) return {name:"Divine",emoji:"💫"};
+if(score>=2500) return {name:"Royal",emoji:"👑"};
+if(score>=1000) return {name:"Gold",emoji:"🔥"};
+if(score>=500) return {name:"Silver",emoji:"🌙"};
+return {name:"Bronze",emoji:"🪨"};
+}
+
+async function loadLeaderboard(){
+
+const table=document.getElementById("leaderboard-body");
+const yourRankBox=document.getElementById("yourRank");
+
+try{
+
+const q=query(
+collection(db,"users"),
+orderBy("score","desc"),
+limit(100)
+);
+
+const snapshot=await getDocs(q);
+table.innerHTML="";
+let foundPlayer=false;
+
+snapshot.docs.forEach((docSnap,index)=>{
+
+const data=docSnap.data();
+const username=data.username ?? "Unknown";
+const score=data.score ?? 0;
+const rank=getRank(score);
+
+let medal="";
+if(index===0) medal="🥇";
+else if(index===1) medal="🥈";
+else if(index===2) medal="🥉";
+
+const row=document.createElement("tr");
+
+if(index===0) row.classList.add("gold");
+else if(index===1) row.classList.add("silver");
+else if(index===2) row.classList.add("bronze");
+
+if(docSnap.id===currentUID){
+row.classList.add("you");
+yourRankBox.innerHTML=
+`${rank.emoji} You are <strong>#${index+1}</strong> — ${rank.name}`;
+foundPlayer=true;
+}
+
+row.innerHTML=`
+<td>#${index+1}</td>
+<td>${medal} ${rank.emoji} ${username}</td>
+<td>${score}</td>
+`;
+
+table.appendChild(row);
+
+});
+
+if(!foundPlayer){
+yourRankBox.innerHTML="Play a game to earn a rank 😄";
+}
+
+}catch(err){
+console.error(err);
+table.innerHTML=`<tr><td colspan="3">Failed to load leaderboard.</td></tr>`;
+}
+}
+
+auth.onAuthStateChanged(user=>{
+if(!user){
+window.location.href="login.html";
+return;
+}
+currentUID=user.uid;
+loadLeaderboard();
 });
 </script>
 
-<!-- your firebase leaderboard logic -->
-<script type="module" src="js/leaderboard.js"></script>
+<script src="/js/version.js"></script>
 
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Global Leaderboard — Hyperframe</title>
-
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-
-<style>
-
-/* ========= GLOBAL ========= */
-
-:root{
---accent:#a855f7;
---accent2:#6366f1;
---glass:rgba(255,255,255,.06);
---border:rgba(255,255,255,.1);
-}
-
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
-
-body{
-font-family:'Space Grotesk',sans-serif;
-background:#040404;
-color:white;
-min-height:100vh;
-overflow-x:hidden;
-}
-
-/* ========= BACKGROUND ========= */
-
-.bg{
-position:fixed;
-inset:0;
-z-index:-2;
-}
-
-.orb{
-position:absolute;
-width:700px;
-height:700px;
-border-radius:50%;
-filter:blur(160px);
-opacity:.35;
-animation:float 20s infinite ease-in-out;
-}
-
-.orb:nth-child(1){
-background:#7c3aed;
-top:-250px;
-left:-200px;
-}
-
-.orb:nth-child(2){
-background:#2563eb;
-bottom:-300px;
-right:-200px;
-animation-duration:26s;
-}
-
-@keyframes float{
-0%{transform:translateY(0)}
-50%{transform:translateY(80px)}
-100%{transform:translateY(0)}
-}
-
-/* mouse glow */
-
-.glow{
-position:fixed;
-width:600px;
-height:600px;
-border-radius:50%;
-background:radial-gradient(circle, rgba(168,85,247,.18), transparent 60%);
-pointer-events:none;
-z-index:-1;
-transform:translate(-50%,-50%);
-}
-
-/* ========= ARENA ========= */
-
-.container{
-max-width:900px;
-margin:120px auto;
-padding:3rem;
-border-radius:26px;
-background:var(--glass);
-backdrop-filter:blur(30px);
-border:1px solid var(--border);
-box-shadow:0 20px 80px rgba(0,0,0,.7);
-}
-
-/* title */
-
-h1{
-text-align:center;
-font-family:'JetBrains Mono';
-margin-bottom:2.5rem;
-font-size:2.2rem;
-background:linear-gradient(90deg,#c084fc,#818cf8);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-/* ========= PLAYER ROW ========= */
-
-.player{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 20px;
-margin:14px 0;
-border-radius:16px;
-background:rgba(255,255,255,.04);
-transition:.25s;
-}
-
-.player:hover{
-transform:translateY(-6px);
-box-shadow:0 0 25px rgba(168,85,247,.25);
-}
-
-/* YOU highlight */
-
-.you{
-outline:2px solid var(--accent);
-box-shadow:0 0 20px rgba(168,85,247,.45);
-}
-
-/* TOP 3 */
-
-.player:nth-child(1){
-background:linear-gradient(90deg, rgba(255,215,0,.15), transparent);
-}
-
-.player:nth-child(2){
-background:linear-gradient(90deg, rgba(192,192,192,.15), transparent);
-}
-
-.player:nth-child(3){
-background:linear-gradient(90deg, rgba(205,127,50,.15), transparent);
-}
-
-/* rank */
-
-.rank{
-font-weight:700;
-opacity:.7;
-}
-
-/* home button */
-
-.homeBtn{
-display:block;
-margin:40px auto 0;
-padding:.9rem 1.6rem;
-border:none;
-border-radius:16px;
-font-weight:600;
-cursor:pointer;
-background:linear-gradient(135deg,var(--accent),var(--accent2));
-color:white;
-transition:.25s;
-}
-
-.homeBtn:hover{
-transform:translateY(-4px);
-box-shadow:0 0 25px var(--accent);
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="bg">
-<div class="orb"></div>
-<div class="orb"></div>
-</div>
-
-<div class="glow" id="glow"></div>
-
-<div class="container">
-
-<h1>🏆 Global Time Arena</h1>
-
-<div id="board"></div>
-
-<button class="homeBtn" onclick="goHome()">⬅ Back Home</button>
-
-</div>
-
-<script>
-function goHome(){
-window.location.href="index.html";
-}
-
-// mouse glow
-const glow=document.getElementById("glow");
-
-window.addEventListener("mousemove",e=>{
-glow.style.left=e.clientX+"px";
-glow.style.top=e.clientY+"px";
-});
-</script>
-
-<!-- your firebase leaderboard logic -->
-<script type="module" src="js/leaderboard.js"></script>
-
-</body>
-</html>
->>>>>>> ac2bdb4ab0c2882cfbaa1f5c6a06570f30655ca0

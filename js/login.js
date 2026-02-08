@@ -1,89 +1,84 @@
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 
 import {
-doc,
-getDoc,
-setDoc
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    setDoc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-const USER_KEY = "username";
-
-// Auto redirect if already logged in
-if(localStorage.getItem(USER_KEY)){
-window.location.href = "index.html";
-}
-
-
-document.addEventListener("DOMContentLoaded", () => {
-
-console.log("LOGIN JS LOADED");
-
-const form = document.getElementById("loginForm");
+const form = document.getElementById("login-form");
+const usernameInput = document.getElementById("username");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const message = document.getElementById("message");
 
 form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // STOP PAGE REFRESH
 
-e.preventDefault(); // 🚨 stops refresh
+    const username = usernameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
-console.log("LOGIN CLICKED");
+    message.textContent = "Loading...";
 
-const username = document.getElementById("username").value.trim();
-const password = document.getElementById("password").value.trim();
+    try {
 
-if(username.length < 3){
-alert("Username must be at least 3 characters.");
-return;
-}
+        // 🔥 Try login first
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-if(password.length < 3){
-alert("Password must be at least 3 characters.");
-return;
-}
+        message.textContent = "Login successful!";
+        console.log("Logged in:", userCredential.user);
 
-try{
+        // redirect example:
+        window.location.href = "index.html";
 
-const ref = doc(db,"users",username);
-const snap = await getDoc(ref);
+    } catch (loginError) {
 
+        // If user doesn't exist → create account
+        if (loginError.code === "auth/user-not-found" ||
+            loginError.code === "auth/invalid-credential") {
 
-// ✅ EXISTING USER
-if(snap.exists()){
+            try {
 
-if(snap.data().password !== password){
-alert("Incorrect password.");
-return;
-}
+                const newUser = await createUserWithEmailAndPassword(auth, email, password);
 
-}else{
+                // Store username in Firestore
+                await setDoc(doc(db, "users", newUser.user.uid), {
+                    username: username,
+                    email: email,
+                    createdAt: Date.now()
+                });
 
-// ✅ CREATE ACCOUNT
-await setDoc(ref,{
-username,
-password,
-time:0,
-created:Date.now()
-});
+                message.textContent = "Account created!";
+                console.log("Created user:", newUser.user);
 
-console.log("Account created!");
+                window.location.href = "index.html";
 
-}
+            } catch (createError) {
 
+                if (createError.code === "auth/email-already-in-use") {
+                    message.textContent = "Email already exists.";
+                } else if (createError.code === "auth/weak-password") {
+                    message.textContent = "Password must be at least 6 characters.";
+                } else {
+                    message.textContent = createError.message;
+                }
+            }
 
-// Save session
-localStorage.setItem(USER_KEY,username);
+        } else {
 
-
-// Redirect
-window.location.href = "index.html";
-
-
-}catch(err){
-
-console.error(err);
-alert("Login failed. Check console.");
-
-}
-
-});
-
+            if (loginError.code === "auth/wrong-password") {
+                message.textContent = "Wrong password.";
+            } else if (loginError.code === "auth/too-many-requests") {
+                message.textContent = "Too many attempts — wait 30 seconds.";
+            } else {
+                message.textContent = loginError.message;
+            }
+        }
+    }
 });
